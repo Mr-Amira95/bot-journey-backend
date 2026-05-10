@@ -1,0 +1,339 @@
+{
+	"info": {
+		"_postman_id": "b3e4d1f2-7a8b-4c9d-9e0f-1a2b3c4d5e6f",
+		"name": "Bot Journey API",
+		"description": "Full API collection for Bot Journey Backend including Chatbot, Industries, Projects, Blogs, FAQ, and Landing Page Content.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Admin Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@botjourney.com\",\n    \"password\": \"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/admin/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"login"
+							]
+						}
+					}
+				},
+				{
+					"name": "Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{admin_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/admin/profile",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"profile"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "General APIs",
+			"item": [
+				{
+					"name": "Landing Page Content",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/general/landing-page",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"general",
+								"landing-page"
+							]
+						}
+					}
+				},
+				{
+					"name": "Chatbot Send",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"session_id\": \"test_session_123\",\n    \"message\": \"Hello, I need a fitness plan.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/general/chatbot/send",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"general",
+								"chatbot",
+								"send"
+							]
+						}
+					}
+				},
+				{
+					"name": "Industries List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/general/industries",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"general",
+								"industries"
+							]
+						}
+					}
+				},
+				{
+					"name": "Projects List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/general/projects",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"general",
+								"projects"
+							]
+						}
+					}
+				},
+				{
+					"name": "FAQ Grouped",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/general/faqs?search=",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"general",
+								"faqs"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": ""
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Blog List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/general/blogs",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"general",
+								"blogs"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Admin APIs",
+			"item": [
+				{
+					"name": "Industries",
+					"item": [
+						{
+							"name": "Add Industry",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": {\"en\": \"Healthcare\", \"ar\": \"الرعاية الصحية\"},\n    \"description\": {\"en\": \"Medical solutions\", \"ar\": \"حلول طبية\"},\n    \"tagline\": {\"en\": \"Innovating health\", \"ar\": \"ابتكار الصحة\"},\n    \"color\": \"#4A90E2\",\n    \"features\": [{\"en\": \"Feature 1\", \"ar\": \"ميزة 1\"}]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/admin/industries",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"admin",
+										"industries"
+									]
+								}
+							}
+						}
+					]
+				},
+				{
+					"name": "Projects",
+					"item": [
+						{
+							"name": "Add Project",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"industry_id\": 1,\n    \"title\": {\"en\": \"Project X\", \"ar\": \"مشروع X\"},\n    \"description\": {\"en\": \"A great project\", \"ar\": \"مشروع رائع\"},\n    \"outcome_value\": \"100%\",\n    \"outcome_label\": {\"en\": \"Efficiency\", \"ar\": \"الكفاءة\"}\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/admin/projects",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"admin",
+										"projects"
+									]
+								}
+							}
+						}
+					]
+				},
+				{
+					"name": "Sections",
+					"item": [
+						{
+							"name": "Add Section",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"type\": \"hero\",\n    \"title\": {\"en\": \"Welcome\", \"ar\": \"أهلاً بك\"},\n    \"subtitle\": {\"en\": \"The best bot\", \"ar\": \"أفضل بوت\"},\n    \"badge\": {\"en\": \"New\", \"ar\": \"جديد\"}\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/admin/sections",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"admin",
+										"sections"
+									]
+								}
+							}
+						}
+					]
+				},
+				{
+					"name": "Chatbot Sessions (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/admin/chatbot/sessions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"chatbot",
+								"sessions"
+							]
+						}
+					}
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{admin_token}}",
+						"type": "string"
+					}
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000"
+		},
+		{
+			"key": "admin_token",
+			"value": "your_bearer_token_here"
+		}
+	]
+}

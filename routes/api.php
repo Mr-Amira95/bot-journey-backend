@@ -11,11 +11,17 @@ use App\Http\Controllers\Api\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Api\Admin\FaqCategoryController as AdminFaqCategoryController;
 use App\Http\Controllers\Api\Admin\FaqController as AdminFaqController;
 use App\Http\Controllers\Api\Admin\BlogController as AdminBlogController;
+use App\Http\Controllers\Api\Admin\SectionController as AdminSectionController;
+use App\Http\Controllers\Api\Admin\FeatureController as AdminFeatureController;
+use App\Http\Controllers\Api\Admin\WorkflowController as AdminWorkflowController;
+use App\Http\Controllers\Api\Admin\UseCaseController as AdminUseCaseController;
+use App\Http\Controllers\Api\Admin\ProcessController as AdminProcessController;
 use App\Http\Controllers\Api\General\ChatbotController;
 use App\Http\Controllers\Api\General\IndustryController;
 use App\Http\Controllers\Api\General\ProjectController;
 use App\Http\Controllers\Api\General\FaqController;
 use App\Http\Controllers\Api\General\BlogController;
+use App\Http\Controllers\Api\General\ContentController;
 
 // Admin API Routes
 Route::prefix('admin')->group(function () {
@@ -50,6 +56,21 @@ Route::prefix('admin')->group(function () {
 
         // Blog Admin Routes
         Route::apiResource('blogs', AdminBlogController::class);
+
+        // Landing Page Content Admin Routes
+        Route::apiResource('sections', AdminSectionController::class);
+        
+        Route::apiResource('features', AdminFeatureController::class);
+        Route::post('features/{feature}/points', [AdminFeatureController::class, 'addPoint']);
+        Route::delete('features/{feature}/points/{point}', [AdminFeatureController::class, 'deletePoint']);
+
+        Route::apiResource('workflows', AdminWorkflowController::class);
+        
+        Route::apiResource('use-cases', AdminUseCaseController::class);
+        Route::post('use-cases/{use_case}/tags', [AdminUseCaseController::class, 'addTag']);
+        Route::delete('use-cases/{use_case}/tags/{tag}', [AdminUseCaseController::class, 'deleteTag']);
+
+        Route::apiResource('processes', AdminProcessController::class);
     });
 });
 
@@ -76,4 +97,12 @@ Route::prefix('general')->group(function () {
     // Blog Routes
     Route::get('/blogs', [BlogController::class, 'index']);
     Route::get('/blogs/{id}', [BlogController::class, 'show']);
+
+    // Content Routes
+    Route::get('/landing-page', [ContentController::class, 'getLandingPageContent']);
+    Route::get('/sections/{type}', [ContentController::class, 'getSectionsByType']);
+    Route::get('/features', [ContentController::class, 'getFeatures']);
+    Route::get('/workflows', [ContentController::class, 'getWorkflows']);
+    Route::get('/use-cases', [ContentController::class, 'getUseCases']);
+    Route::get('/processes', [ContentController::class, 'getProcesses']);
 });
