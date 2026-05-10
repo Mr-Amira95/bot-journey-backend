@@ -8,10 +8,12 @@ use App\Http\Controllers\Api\Admin\PasswordResetController as AdminPasswordReset
 use App\Http\Controllers\Api\Admin\ChatbotController as AdminChatbotController;
 use App\Http\Controllers\Api\Admin\IndustryController as AdminIndustryController;
 use App\Http\Controllers\Api\Admin\ProjectController as AdminProjectController;
+use App\Http\Controllers\Api\Admin\FaqCategoryController as AdminFaqCategoryController;
+use App\Http\Controllers\Api\Admin\FaqController as AdminFaqController;
 use App\Http\Controllers\Api\General\ChatbotController;
 use App\Http\Controllers\Api\General\IndustryController;
 use App\Http\Controllers\Api\General\ProjectController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\General\FaqController;
 
 // Admin API Routes
 Route::prefix('admin')->group(function () {
@@ -39,6 +41,10 @@ Route::prefix('admin')->group(function () {
         Route::apiResource('projects', AdminProjectController::class);
         Route::delete('projects/{project}/features/{feature}', [AdminProjectController::class, 'deleteFeature']);
         Route::delete('projects/{project}/media/{media}', [AdminProjectController::class, 'deleteMedia']);
+
+        // FAQ Admin Routes
+        Route::apiResource('faq-categories', AdminFaqCategoryController::class);
+        Route::apiResource('faqs', AdminFaqController::class);
     });
 });
 
@@ -58,4 +64,7 @@ Route::prefix('general')->group(function () {
     Route::get('/industries/{id}', [IndustryController::class, 'show']);
     Route::get('/projects', [ProjectController::class, 'index']);
     Route::get('/projects/{id}', [ProjectController::class, 'show']);
+
+    // FAQ Routes
+    Route::get('/faqs', [FaqController::class, 'index']);
 });
