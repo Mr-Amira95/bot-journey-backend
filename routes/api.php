@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Api\Admin\PasswordResetController as AdminPasswordResetController;
+use App\Http\Controllers\Api\Admin\ChatbotController as AdminChatbotController;
+use App\Http\Controllers\Api\General\ChatbotController;
 
 // Admin API Routes
 Route::prefix('admin')->group(function () {
@@ -20,6 +22,8 @@ Route::prefix('admin')->group(function () {
         Route::post('/logout', [AdminAuthController::class, 'logout']);
         
         // Add more admin protected routes here
+        Route::get('/chatbot/sessions', [AdminChatbotController::class, 'getAllMessages']);
+        Route::delete('/chatbot/messages', [AdminChatbotController::class, 'deleteMessages']);
     });
 });
 
@@ -29,4 +33,8 @@ Route::prefix('general')->group(function () {
     Route::get('/ping', function () {
         return response()->json(['message' => 'pong']);
     });
+
+    // Chatbot Routes
+    Route::post('/chatbot/send', [ChatbotController::class, 'sendMessage']);
+    Route::get('/chatbot/messages', [ChatbotController::class, 'getMessages']);
 });
