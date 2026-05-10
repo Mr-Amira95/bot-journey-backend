@@ -10,10 +10,12 @@ use App\Http\Controllers\Api\Admin\IndustryController as AdminIndustryController
 use App\Http\Controllers\Api\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Api\Admin\FaqCategoryController as AdminFaqCategoryController;
 use App\Http\Controllers\Api\Admin\FaqController as AdminFaqController;
+use App\Http\Controllers\Api\Admin\BlogController as AdminBlogController;
 use App\Http\Controllers\Api\General\ChatbotController;
 use App\Http\Controllers\Api\General\IndustryController;
 use App\Http\Controllers\Api\General\ProjectController;
 use App\Http\Controllers\Api\General\FaqController;
+use App\Http\Controllers\Api\General\BlogController;
 
 // Admin API Routes
 Route::prefix('admin')->group(function () {
@@ -45,6 +47,9 @@ Route::prefix('admin')->group(function () {
         // FAQ Admin Routes
         Route::apiResource('faq-categories', AdminFaqCategoryController::class);
         Route::apiResource('faqs', AdminFaqController::class);
+
+        // Blog Admin Routes
+        Route::apiResource('blogs', AdminBlogController::class);
     });
 });
 
@@ -67,4 +72,8 @@ Route::prefix('general')->group(function () {
 
     // FAQ Routes
     Route::get('/faqs', [FaqController::class, 'index']);
+
+    // Blog Routes
+    Route::get('/blogs', [BlogController::class, 'index']);
+    Route::get('/blogs/{id}', [BlogController::class, 'show']);
 });
