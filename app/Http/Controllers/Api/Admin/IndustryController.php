@@ -20,6 +20,15 @@ class IndustryController extends Controller
     }
 
     /**
+     * Get specific industry details.
+     */
+    public function show($id)
+    {
+        $industry = Industry::with(['features', 'projects.features', 'media'])->findOrFail($id);
+        return response()->json(['status' => 'success', 'data' => $industry]);
+    }
+
+    /**
      * Add industry with features.
      */
     public function store(Request $request)

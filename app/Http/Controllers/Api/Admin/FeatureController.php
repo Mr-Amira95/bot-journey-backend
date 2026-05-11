@@ -15,6 +15,11 @@ class FeatureController extends Controller
         return response()->json(['status' => 'success', 'data' => $features]);
     }
 
+    public function show($id)
+    {
+        return response()->json(['status' => 'success', 'data' => Feature::with('points')->findOrFail($id)]);
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([

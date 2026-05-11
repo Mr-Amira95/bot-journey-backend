@@ -13,6 +13,11 @@ class SectionController extends Controller
         return response()->json(['status' => 'success', 'data' => Section::all()]);
     }
 
+    public function show($id)
+    {
+        return response()->json(['status' => 'success', 'data' => Section::findOrFail($id)]);
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([

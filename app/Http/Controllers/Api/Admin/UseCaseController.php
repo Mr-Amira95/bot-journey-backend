@@ -15,6 +15,11 @@ class UseCaseController extends Controller
         return response()->json(['status' => 'success', 'data' => $useCases]);
     }
 
+    public function show($id)
+    {
+        return response()->json(['status' => 'success', 'data' => UseCase::with('tags')->findOrFail($id)]);
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([

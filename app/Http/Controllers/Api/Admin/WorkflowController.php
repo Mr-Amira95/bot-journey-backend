@@ -13,6 +13,11 @@ class WorkflowController extends Controller
         return response()->json(['status' => 'success', 'data' => Workflow::orderBy('order')->get()]);
     }
 
+    public function show($id)
+    {
+        return response()->json(['status' => 'success', 'data' => Workflow::findOrFail($id)]);
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([

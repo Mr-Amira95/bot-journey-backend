@@ -20,6 +20,15 @@ class ProjectController extends Controller
     }
 
     /**
+     * Get specific project details.
+     */
+    public function show($id)
+    {
+        $project = Project::with(['features', 'industry', 'media'])->findOrFail($id);
+        return response()->json(['status' => 'success', 'data' => $project]);
+    }
+
+    /**
      * Add Project with features and media.
      */
     public function store(Request $request)

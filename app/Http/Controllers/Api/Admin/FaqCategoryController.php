@@ -18,6 +18,15 @@ class FaqCategoryController extends Controller
     }
 
     /**
+     * Get specific FAQ category details.
+     */
+    public function show($id)
+    {
+        $category = FaqCategory::with('faqs')->findOrFail($id);
+        return response()->json(['status' => 'success', 'data' => $category]);
+    }
+
+    /**
      * Add FAQ Category.
      */
     public function store(Request $request)

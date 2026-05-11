@@ -18,6 +18,15 @@ class BlogController extends Controller
     }
 
     /**
+     * Get specific blog details.
+     */
+    public function show($id)
+    {
+        $blog = Blog::findOrFail($id);
+        return response()->json(['status' => 'success', 'data' => $blog]);
+    }
+
+    /**
      * Add blog.
      */
     public function store(Request $request)

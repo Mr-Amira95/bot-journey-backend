@@ -19,6 +19,15 @@ class FaqController extends Controller
     }
 
     /**
+     * Get specific FAQ details.
+     */
+    public function show($id)
+    {
+        $faq = Faq::with('category')->findOrFail($id);
+        return response()->json(['status' => 'success', 'data' => $faq]);
+    }
+
+    /**
      * Add FAQ.
      */
     public function store(Request $request)

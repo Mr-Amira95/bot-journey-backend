@@ -13,6 +13,11 @@ class ProcessController extends Controller
         return response()->json(['status' => 'success', 'data' => Process::all()]);
     }
 
+    public function show($id)
+    {
+        return response()->json(['status' => 'success', 'data' => Process::findOrFail($id)]);
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([
