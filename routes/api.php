@@ -82,6 +82,25 @@ Route::prefix('admin')->group(function () {
         // Contact Forms
         Route::get('contact-forms', [\App\Http\Controllers\Api\Admin\ContactFormController::class, 'index']);
         Route::delete('contact-forms/{id}', [\App\Http\Controllers\Api\Admin\ContactFormController::class, 'destroy']);
+
+        // Databricks Page Content
+        Route::get('databricks/sections', [\App\Http\Controllers\Api\Admin\DatabricksPageController::class, 'getSections']);
+        Route::post('databricks/sections', [\App\Http\Controllers\Api\Admin\DatabricksPageController::class, 'updateSections']);
+        
+        Route::get('databricks/services', [\App\Http\Controllers\Api\Admin\DatabricksPageController::class, 'getServices']);
+        Route::post('databricks/services', [\App\Http\Controllers\Api\Admin\DatabricksPageController::class, 'storeService']);
+        Route::post('databricks/services/{id}', [\App\Http\Controllers\Api\Admin\DatabricksPageController::class, 'updateService']);
+        Route::delete('databricks/services/{id}', [\App\Http\Controllers\Api\Admin\DatabricksPageController::class, 'destroyService']);
+
+        Route::get('databricks/use-cases', [\App\Http\Controllers\Api\Admin\DatabricksPageController::class, 'getUseCases']);
+        Route::post('databricks/use-cases', [\App\Http\Controllers\Api\Admin\DatabricksPageController::class, 'storeUseCase']);
+        Route::post('databricks/use-cases/{id}', [\App\Http\Controllers\Api\Admin\DatabricksPageController::class, 'updateUseCase']);
+        Route::delete('databricks/use-cases/{id}', [\App\Http\Controllers\Api\Admin\DatabricksPageController::class, 'destroyUseCase']);
+
+        Route::get('databricks/stats', [\App\Http\Controllers\Api\Admin\DatabricksPageController::class, 'getStats']);
+        Route::post('databricks/stats', [\App\Http\Controllers\Api\Admin\DatabricksPageController::class, 'storeStat']);
+        Route::post('databricks/stats/{id}', [\App\Http\Controllers\Api\Admin\DatabricksPageController::class, 'updateStat']);
+        Route::delete('databricks/stats/{id}', [\App\Http\Controllers\Api\Admin\DatabricksPageController::class, 'destroyStat']);
     });
 });
 
@@ -122,4 +141,7 @@ Route::prefix('general')->group(function () {
 
     // Contact Form
     Route::post('/contact', [\App\Http\Controllers\Api\General\ContactFormController::class, 'store']);
+
+    // Databricks Page Dynamic Content
+    Route::get('/databricks-page', [\App\Http\Controllers\Api\General\DatabricksController::class, 'getPageContent']);
 });
