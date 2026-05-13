@@ -8,6 +8,9 @@ use App\Models\Feature;
 use App\Models\Workflow;
 use App\Models\UseCase;
 use App\Models\Process;
+use App\Models\AiSubpoint;
+use App\Models\AiStatistic;
+use App\Models\Industry;
 use Illuminate\Http\Request;
 
 class ContentController extends Controller
@@ -25,6 +28,9 @@ class ContentController extends Controller
                 'workflows' => Workflow::orderBy('order')->get(),
                 'use_cases' => UseCase::with('tags')->get(),
                 'processes' => Process::all(),
+                'ai_subpoints' => AiSubpoint::all(),
+                'ai_statistics' => AiStatistic::all(),
+                'industries' => Industry::with(['features', 'media'])->get(),
             ]
         ]);
     }
@@ -68,5 +74,30 @@ class ContentController extends Controller
     public function getProcesses()
     {
         return response()->json(['status' => 'success', 'data' => Process::all()]);
+    }
+
+    /**
+     * Get all AI Subpoints.
+     */
+    public function getAiSubpoints()
+    {
+        return response()->json(['status' => 'success', 'data' => AiSubpoint::all()]);
+    }
+
+    /**
+     * Get all AI Statistics.
+     */
+    public function getAiStatistics()
+    {
+        return response()->json(['status' => 'success', 'data' => AiStatistic::all()]);
+    }
+
+    /**
+     * Get Site Settings.
+     */
+    public function getSettings()
+    {
+        $settings = \App\Models\Setting::all()->pluck('value', 'key');
+        return response()->json(['status' => 'success', 'data' => $settings]);
     }
 }

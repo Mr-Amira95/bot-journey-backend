@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('sections', function (Blueprint $table) {
             $table->id();
-            $table->string('type'); // projects, faq, blog, cta, why_botjourney, industries, how_it_works, hero
+            $table->enum('type', ['hero', 'how_it_works', 'industries', 'why_botjourney', 'cta', 'blog', 'faq', 'projects'])->unique();
             $table->json('title')->nullable();
             $table->json('subtitle')->nullable();
             $table->json('badge')->nullable();

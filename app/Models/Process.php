@@ -9,6 +9,7 @@ class Process extends Model
     protected $fillable = [
         'title',
         'description',
+        'icon',
     ];
 
     protected $casts = [

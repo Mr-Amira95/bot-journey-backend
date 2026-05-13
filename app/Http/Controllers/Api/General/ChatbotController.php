@@ -32,28 +32,25 @@ class ChatbotController extends Controller
         $request->validate([
             'message' => 'required|string|max:1000',
             'session_id' => 'required',
-            'journey_id' => 'required|integer',
         ]);
 
         // 1. Save user message
         ChatbotMessage::create([
-            'journey_id' => $request->journey_id,
             'session_id' => $request->session_id,
             'message' => $request->message,
             'role' => 'user',
         ]);
 
         // 2. Fetch conversation history
-        $messages = ChatbotMessage::where('journey_id', $request->journey_id)
+        $messages = ChatbotMessage::where('session_id', $request->session_id)
             ->orderBy('created_at', 'asc')
             ->get(['message', 'role']);
 
         // 3. Get response from service
-        $reply = (new ChatbotService())->respond($messages);
+        $reply = $this->chatbotService->respond($messages);
 
         // 4. Save bot message
         $botMessage = ChatbotMessage::create([
-            'journey_id' => $request->journey_id,
             'session_id' => $request->session_id,
             'message' => $reply,
             'role' => 'bot',

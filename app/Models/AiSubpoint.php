@@ -4,21 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class UseCase extends Model
+class AiSubpoint extends Model
 {
     protected $fillable = [
+        'icon',
         'title',
         'description',
-        'icon',
     ];
 
     protected $casts = [
         'title' => 'array',
         'description' => 'array',
-    ];
-
-    public function tags()
-    {
-        return $this->hasMany(UseCaseTag::class);
-    }
-}
+    ];}

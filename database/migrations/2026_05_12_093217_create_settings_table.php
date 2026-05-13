@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('processes', function (Blueprint $table) {
+        Schema::create('settings', function (Blueprint $table) {
             $table->id();
-            $table->json('title');
-            $table->json('description')->nullable();
-            $table->string('icon')->nullable();
+            $table->enum('key', ['privacy', 'terms', 'tagline', 'email', 'phone', 'address', 'linkedin', 'twitter'])->unique();
+            $table->json('value');
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('processes');
+        Schema::dropIfExists('settings');
     }
 };

@@ -37,8 +37,12 @@ class FaqController extends Controller
             'question' => 'required|array',
             'answer' => 'required|array',
             'featured' => 'nullable|boolean',
-            'media' => 'nullable|string',
+            'media' => 'nullable|file|max:10240',
         ]);
+
+        if ($request->hasFile('media')) {
+            $data['media'] = $request->file('media')->store('faq_media', 'public');
+        }
 
         $faq = Faq::create($data);
 
@@ -56,8 +60,17 @@ class FaqController extends Controller
             'question' => 'nullable|array',
             'answer' => 'nullable|array',
             'featured' => 'nullable|boolean',
-            'media' => 'nullable|string',
+            'media' => 'nullable|file|max:10240',
         ]);
+
+        if ($request->hasFile('media')) {
+            if ($faq->media) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($faq->media);
+            }
+            $data['media'] = $request->file('media')->store('faq_media', 'public');
+        } else {
+            unset($data['media']);
+        }
 
         $faq->update($data);
 

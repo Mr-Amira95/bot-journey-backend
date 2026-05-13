@@ -27,8 +27,13 @@ class FeatureController extends Controller
             'stat_value' => 'nullable|string',
             'stat_suffix' => 'nullable|array',
             'stat_description' => 'nullable|array',
+            'icon' => 'nullable|file|max:10240',
             'points' => 'nullable|array',
         ]);
+
+        if ($request->hasFile('icon')) {
+            $data['icon'] = $request->file('icon')->store('icons', 'public');
+        }
 
         $feature = Feature::create($data);
 
@@ -49,15 +54,38 @@ class FeatureController extends Controller
             'stat_value' => 'nullable|string',
             'stat_suffix' => 'nullable|array',
             'stat_description' => 'nullable|array',
+            'icon' => 'nullable|file|max:10240',
+            'points' => 'nullable|array',
         ]);
 
+        if ($request->hasFile('icon')) {
+            if ($feature->icon) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($feature->icon);
+            }
+            $data['icon'] = $request->file('icon')->store('icons', 'public');
+        } else {
+            unset($data['icon']);
+        }
+
         $feature->update($data);
-        return response()->json(['status' => 'success', 'data' => $feature]);
+
+        if ($request->has('points')) {
+            $feature->points()->delete();
+            foreach ($request->points as $point) {
+                $feature->points()->create(['key' => $point]);
+            }
+        }
+
+        return response()->json(['status' => 'success', 'data' => $feature->load('points')]);
     }
 
     public function destroy($id)
     {
-        Feature::findOrFail($id)->delete();
+        $feature = Feature::findOrFail($id);
+        if ($feature->icon) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($feature->icon);
+        }
+        $feature->delete();
         return response()->json(['status' => 'success', 'message' => 'Feature deleted']);
     }
 

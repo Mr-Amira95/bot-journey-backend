@@ -13,15 +13,15 @@ class SectionController extends Controller
         return response()->json(['status' => 'success', 'data' => Section::all()]);
     }
 
-    public function show($id)
+    public function show($type)
     {
-        return response()->json(['status' => 'success', 'data' => Section::findOrFail($id)]);
+        return response()->json(['status' => 'success', 'data' => Section::where('type', $type)->firstOrFail()]);
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
-            'type' => 'required|string',
+            'type' => 'required|in:hero,how_it_works,industries,why_botjourney,cta,blog,faq,projects,agentic_ai',
             'title' => 'nullable|array',
             'subtitle' => 'nullable|array',
             'badge' => 'nullable|array',
@@ -33,11 +33,11 @@ class SectionController extends Controller
         return response()->json(['status' => 'success', 'data' => $section], 201);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $type)
     {
-        $section = Section::findOrFail($id);
+        $section = Section::where('type', $type)->firstOrFail();
         $data = $request->validate([
-            'type' => 'nullable|string',
+            'type' => 'nullable|in:hero,how_it_works,industries,why_botjourney,cta,blog,faq,projects,agentic_ai',
             'title' => 'nullable|array',
             'subtitle' => 'nullable|array',
             'badge' => 'nullable|array',
@@ -49,9 +49,9 @@ class SectionController extends Controller
         return response()->json(['status' => 'success', 'data' => $section]);
     }
 
-    public function destroy($id)
+    public function destroy($type)
     {
-        Section::findOrFail($id)->delete();
+        Section::where('type', $type)->firstOrFail()->delete();
         return response()->json(['status' => 'success', 'message' => 'Section deleted']);
     }
 }

@@ -10,6 +10,7 @@ class Workflow extends Model
         'title',
         'subtitle',
         'order',
+        'icon',
     ];
 
     protected $casts = [

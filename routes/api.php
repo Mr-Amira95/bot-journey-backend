@@ -58,7 +58,7 @@ Route::prefix('admin')->group(function () {
         Route::apiResource('blogs', AdminBlogController::class);
 
         // Landing Page Content Admin Routes
-        Route::apiResource('sections', AdminSectionController::class);
+        Route::apiResource('sections', AdminSectionController::class)->parameters(['sections' => 'type']);
         
         Route::apiResource('features', AdminFeatureController::class);
         Route::post('features/{feature}/points', [AdminFeatureController::class, 'addPoint']);
@@ -71,6 +71,17 @@ Route::prefix('admin')->group(function () {
         Route::delete('use-cases/{use_case}/tags/{tag}', [AdminUseCaseController::class, 'deleteTag']);
 
         Route::apiResource('processes', AdminProcessController::class);
+
+        Route::apiResource('ai-subpoints', \App\Http\Controllers\Api\Admin\AiSubpointController::class);
+        Route::apiResource('ai-statistics', \App\Http\Controllers\Api\Admin\AiStatisticController::class);
+
+        // Site Settings
+        Route::get('settings', [\App\Http\Controllers\Api\Admin\SettingController::class, 'index']);
+        Route::post('settings', [\App\Http\Controllers\Api\Admin\SettingController::class, 'update']);
+
+        // Contact Forms
+        Route::get('contact-forms', [\App\Http\Controllers\Api\Admin\ContactFormController::class, 'index']);
+        Route::delete('contact-forms/{id}', [\App\Http\Controllers\Api\Admin\ContactFormController::class, 'destroy']);
     });
 });
 
@@ -105,4 +116,10 @@ Route::prefix('general')->group(function () {
     Route::get('/workflows', [ContentController::class, 'getWorkflows']);
     Route::get('/use-cases', [ContentController::class, 'getUseCases']);
     Route::get('/processes', [ContentController::class, 'getProcesses']);
+    Route::get('/ai-subpoints', [ContentController::class, 'getAiSubpoints']);
+    Route::get('/ai-statistics', [ContentController::class, 'getAiStatistics']);
+    Route::get('/settings', [\App\Http\Controllers\Api\General\ContentController::class, 'getSettings']);
+
+    // Contact Form
+    Route::post('/contact', [\App\Http\Controllers\Api\General\ContactFormController::class, 'store']);
 });

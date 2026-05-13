@@ -3,19 +3,20 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Process;
+use App\Models\AiSubpoint;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
-class ProcessController extends Controller
+class AiSubpointController extends Controller
 {
     public function index()
     {
-        return response()->json(['status' => 'success', 'data' => Process::all()]);
+        return response()->json(['status' => 'success', 'data' => AiSubpoint::all()]);
     }
 
     public function show($id)
     {
-        return response()->json(['status' => 'success', 'data' => Process::findOrFail($id)]);
+        return response()->json(['status' => 'success', 'data' => AiSubpoint::findOrFail($id)]);
     }
 
     public function store(Request $request)
@@ -30,13 +31,13 @@ class ProcessController extends Controller
             $data['icon'] = $request->file('icon')->store('icons', 'public');
         }
 
-        $process = Process::create($data);
-        return response()->json(['status' => 'success', 'data' => $process], 201);
+        $item = AiSubpoint::create($data);
+        return response()->json(['status' => 'success', 'data' => $item], 201);
     }
 
     public function update(Request $request, $id)
     {
-        $process = Process::findOrFail($id);
+        $item = AiSubpoint::findOrFail($id);
         $data = $request->validate([
             'title' => 'nullable|array',
             'description' => 'nullable|array',
@@ -44,21 +45,26 @@ class ProcessController extends Controller
         ]);
 
         if ($request->hasFile('icon')) {
-            if ($process->icon) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($process->icon);
+            if ($item->icon) {
+                Storage::disk('public')->delete($item->icon);
             }
             $data['icon'] = $request->file('icon')->store('icons', 'public');
         } else {
             unset($data['icon']);
         }
 
-        $process->update($data);
-        return response()->json(['status' => 'success', 'data' => $process]);
+        $item->update($data);
+        return response()->json(['status' => 'success', 'data' => $item]);
     }
 
     public function destroy($id)
     {
-        Process::findOrFail($id)->delete();
-        return response()->json(['status' => 'success', 'message' => 'Process deleted']);
+        $item = AiSubpoint::findOrFail($id);
+        if ($item->icon) {
+            Storage::disk('public')->delete($item->icon);
+        }
+        $item->delete();
+        return response()->json(['status' => 'success', 'message' => 'Deleted successfully']);
     }
 }
+

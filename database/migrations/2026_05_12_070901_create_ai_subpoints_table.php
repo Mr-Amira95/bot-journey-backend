@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('industry_media', function (Blueprint $table) {
+        Schema::create('ai_subpoints', function (Blueprint $table) {
             $table->id();
+            $table->string('icon')->nullable();
+            $table->json('title');
+            $table->json('description')->nullable();
             $table->timestamps();
         });
     }
@@ -22,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('industry_media');
+        Schema::dropIfExists('ai_subpoints');
     }
 };

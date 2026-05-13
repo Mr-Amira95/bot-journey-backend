@@ -11,6 +11,7 @@ class Feature extends Model
         'stat_value',
         'stat_suffix',
         'stat_description',
+        'icon',
     ];
 
     protected $casts = [

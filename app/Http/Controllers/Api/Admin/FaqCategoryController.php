@@ -34,8 +34,12 @@ class FaqCategoryController extends Controller
         $data = $request->validate([
             'title' => 'required|array',
             'description' => 'nullable|array',
-            'icon' => 'nullable|string',
+            'icon' => 'nullable|file|max:10240',
         ]);
+
+        if ($request->hasFile('icon')) {
+            $data['icon'] = $request->file('icon')->store('icons', 'public');
+        }
 
         $category = FaqCategory::create($data);
 
@@ -51,8 +55,17 @@ class FaqCategoryController extends Controller
         $data = $request->validate([
             'title' => 'nullable|array',
             'description' => 'nullable|array',
-            'icon' => 'nullable|string',
+            'icon' => 'nullable|file|max:10240',
         ]);
+
+        if ($request->hasFile('icon')) {
+            if ($category->icon) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($category->icon);
+            }
+            $data['icon'] = $request->file('icon')->store('icons', 'public');
+        } else {
+            unset($data['icon']);
+        }
 
         $category->update($data);
 

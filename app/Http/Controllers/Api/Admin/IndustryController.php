@@ -38,10 +38,15 @@ class IndustryController extends Controller
             'description' => 'nullable|array',
             'tagline' => 'nullable|array',
             'color' => 'nullable|string',
-            'icon_path' => 'nullable|string',
+            'icon_path' => 'nullable|file|max:10240',
             'features' => 'nullable|array',
             'media' => 'nullable|array',
+            'media.*' => 'file|max:10240',
         ]);
+
+        if ($request->hasFile('icon_path')) {
+            $data['icon_path'] = $request->file('icon_path')->store('industries/icons', 'public');
+        }
 
         $industry = Industry::create($data);
 
@@ -51,8 +56,9 @@ class IndustryController extends Controller
             }
         }
 
-        if ($request->has('media')) {
-            foreach ($request->media as $path) {
+        if ($request->hasFile('media')) {
+            foreach ($request->file('media') as $file) {
+                $path = $file->store('industries/media', 'public');
                 $industry->media()->create(['media_path' => $path]);
             }
         }
@@ -71,12 +77,38 @@ class IndustryController extends Controller
             'description' => 'nullable|array',
             'tagline' => 'nullable|array',
             'color' => 'nullable|string',
-            'icon_path' => 'nullable|string',
+            'icon_path' => 'nullable|file|max:10240',
+            'features' => 'nullable|array',
+            'media' => 'nullable|array',
+            'media.*' => 'file|max:10240',
         ]);
+
+        if ($request->hasFile('icon_path')) {
+            if ($industry->icon_path) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($industry->icon_path);
+            }
+            $data['icon_path'] = $request->file('icon_path')->store('industries/icons', 'public');
+        } else {
+            unset($data['icon_path']);
+        }
 
         $industry->update($data);
 
-        return response()->json(['status' => 'success', 'data' => $industry]);
+        if ($request->hasFile('media')) {
+            foreach ($request->file('media') as $file) {
+                $path = $file->store('industries/media', 'public');
+                $industry->media()->create(['media_path' => $path]);
+            }
+        }
+
+        if ($request->has('features')) {
+            $industry->features()->delete();
+            foreach ($request->features as $feature) {
+                $industry->features()->create(['key' => $feature]);
+            }
+        }
+
+        return response()->json(['status' => 'success', 'data' => $industry->load(['features', 'media'])]);
     }
 
     /**
@@ -107,6 +139,7 @@ class IndustryController extends Controller
     public function deleteMedia($industry_id, $media_id)
     {
         $media = IndustryMedia::where('industry_id', $industry_id)->findOrFail($media_id);
+        \Illuminate\Support\Facades\Storage::disk('public')->delete($media->media_path);
         $media->delete();
 
         return response()->json(['status' => 'success', 'message' => 'Industry media deleted successfully']);

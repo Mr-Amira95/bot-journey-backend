@@ -25,8 +25,13 @@ class UseCaseController extends Controller
         $data = $request->validate([
             'title' => 'required|array',
             'description' => 'nullable|array',
+            'icon' => 'nullable|file|max:10240',
             'tags' => 'nullable|array',
         ]);
+
+        if ($request->hasFile('icon')) {
+            $data['icon'] = $request->file('icon')->store('icons', 'public');
+        }
 
         $useCase = UseCase::create($data);
 
@@ -45,15 +50,38 @@ class UseCaseController extends Controller
         $data = $request->validate([
             'title' => 'nullable|array',
             'description' => 'nullable|array',
+            'icon' => 'nullable|file|max:10240',
+            'tags' => 'nullable|array',
         ]);
 
+        if ($request->hasFile('icon')) {
+            if ($useCase->icon) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($useCase->icon);
+            }
+            $data['icon'] = $request->file('icon')->store('icons', 'public');
+        } else {
+            unset($data['icon']);
+        }
+
         $useCase->update($data);
-        return response()->json(['status' => 'success', 'data' => $useCase]);
+
+        if ($request->has('tags')) {
+            $useCase->tags()->delete();
+            foreach ($request->tags as $tag) {
+                $useCase->tags()->create(['tag' => $tag]);
+            }
+        }
+
+        return response()->json(['status' => 'success', 'data' => $useCase->load('tags')]);
     }
 
     public function destroy($id)
     {
-        UseCase::findOrFail($id)->delete();
+        $useCase = UseCase::findOrFail($id);
+        if ($useCase->icon) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($useCase->icon);
+        }
+        $useCase->delete();
         return response()->json(['status' => 'success', 'message' => 'Use case deleted']);
     }
 

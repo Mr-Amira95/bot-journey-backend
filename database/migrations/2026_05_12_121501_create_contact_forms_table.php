@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('processes', function (Blueprint $table) {
+        Schema::create('contact_forms', function (Blueprint $table) {
             $table->id();
-            $table->json('title');
-            $table->json('description')->nullable();
-            $table->string('icon')->nullable();
+            $table->string('name');
+            $table->string('email');
+            $table->string('company')->nullable();
+            $table->text('message');
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('processes');
+        Schema::dropIfExists('contact_forms');
     }
 };

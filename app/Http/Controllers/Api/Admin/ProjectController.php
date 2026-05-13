@@ -40,10 +40,15 @@ class ProjectController extends Controller
             'outcome_value' => 'nullable|string',
             'outcome_label' => 'nullable|array',
             'color' => 'nullable|string',
-            'icon_path' => 'nullable|string',
+            'icon_path' => 'nullable|file|max:10240',
             'features' => 'nullable|array',
             'media' => 'nullable|array',
+            'media.*' => 'file|max:10240',
         ]);
+
+        if ($request->hasFile('icon_path')) {
+            $data['icon_path'] = $request->file('icon_path')->store('projects/icons', 'public');
+        }
 
         $project = Project::create($data);
 
@@ -53,8 +58,9 @@ class ProjectController extends Controller
             }
         }
 
-        if ($request->has('media')) {
-            foreach ($request->media as $path) {
+        if ($request->hasFile('media')) {
+            foreach ($request->file('media') as $file) {
+                $path = $file->store('projects/media', 'public');
                 $project->media()->create(['media_path' => $path]);
             }
         }
@@ -75,10 +81,36 @@ class ProjectController extends Controller
             'outcome_value' => 'nullable|string',
             'outcome_label' => 'nullable|array',
             'color' => 'nullable|string',
-            'icon_path' => 'nullable|string',
+            'icon_path' => 'nullable|file|max:10240',
+            'features' => 'nullable|array',
+            'media' => 'nullable|array',
+            'media.*' => 'file|max:10240',
         ]);
 
+        if ($request->hasFile('icon_path')) {
+            if ($project->icon_path) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($project->icon_path);
+            }
+            $data['icon_path'] = $request->file('icon_path')->store('projects/icons', 'public');
+        } else {
+            unset($data['icon_path']);
+        }
+
         $project->update($data);
+
+        if ($request->has('features')) {
+            $project->features()->delete();
+            foreach ($request->features as $feature) {
+                $project->features()->create(['key' => $feature]);
+            }
+        }
+
+        if ($request->hasFile('media')) {
+            foreach ($request->file('media') as $file) {
+                $path = $file->store('projects/media', 'public');
+                $project->media()->create(['media_path' => $path]);
+            }
+        }
 
         return response()->json(['status' => 'success', 'data' => $project]);
     }
@@ -111,6 +143,7 @@ class ProjectController extends Controller
     public function deleteMedia($project_id, $media_id)
     {
         $media = ProjectMedia::where('project_id', $project_id)->findOrFail($media_id);
+        \Illuminate\Support\Facades\Storage::disk('public')->delete($media->media_path);
         $media->delete();
 
         return response()->json(['status' => 'success', 'message' => 'Project media deleted successfully']);
