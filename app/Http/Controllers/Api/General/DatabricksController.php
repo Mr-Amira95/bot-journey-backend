@@ -7,6 +7,8 @@ use App\Models\DatabricksSection;
 use App\Models\DatabricksService;
 use App\Models\DatabricksUseCase;
 use App\Models\DatabricksStat;
+use App\Models\DatabricksPartnerPoint;
+use App\Models\DatabricksTrustSignal;
 use Illuminate\Http\Request;
 
 class DatabricksController extends Controller
@@ -23,6 +25,8 @@ class DatabricksController extends Controller
                 'services' => DatabricksService::orderBy('order')->get(),
                 'use_cases' => DatabricksUseCase::orderBy('order')->get(),
                 'stats' => DatabricksStat::orderBy('order')->get(),
+                'partner_points' => DatabricksPartnerPoint::orderBy('order')->get(),
+                'trust_signals' => DatabricksTrustSignal::orderBy('order')->get(),
             ]
         ]);
     }

@@ -7,6 +7,8 @@ use App\Models\DatabricksSection;
 use App\Models\DatabricksService;
 use App\Models\DatabricksUseCase;
 use App\Models\DatabricksStat;
+use App\Models\DatabricksPartnerPoint;
+use App\Models\DatabricksTrustSignal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -194,5 +196,83 @@ class DatabricksPageController extends Controller
         $stat = DatabricksStat::findOrFail($id);
         $stat->delete();
         return response()->json(['status' => 'success', 'message' => 'Stat deleted successfully']);
+    }
+
+    // ==========================================
+    // PARTNER POINTS MANAGEMENT
+    // ==========================================
+    public function getPartnerPoints()
+    {
+        $points = DatabricksPartnerPoint::orderBy('order')->get();
+        return response()->json(['status' => 'success', 'data' => $points]);
+    }
+
+    public function storePartnerPoint(Request $request)
+    {
+        $data = $request->validate([
+            'text' => 'required|array',
+            'order' => 'nullable|integer',
+        ]);
+
+        $point = DatabricksPartnerPoint::create($data);
+        return response()->json(['status' => 'success', 'data' => $point], 201);
+    }
+
+    public function updatePartnerPoint(Request $request, $id)
+    {
+        $point = DatabricksPartnerPoint::findOrFail($id);
+        $data = $request->validate([
+            'text' => 'nullable|array',
+            'order' => 'nullable|integer',
+        ]);
+
+        $point->update($data);
+        return response()->json(['status' => 'success', 'data' => $point]);
+    }
+
+    public function destroyPartnerPoint($id)
+    {
+        $point = DatabricksPartnerPoint::findOrFail($id);
+        $point->delete();
+        return response()->json(['status' => 'success', 'message' => 'Partner point deleted successfully']);
+    }
+
+    // ==========================================
+    // TRUST SIGNALS MANAGEMENT
+    // ==========================================
+    public function getTrustSignals()
+    {
+        $signals = DatabricksTrustSignal::orderBy('order')->get();
+        return response()->json(['status' => 'success', 'data' => $signals]);
+    }
+
+    public function storeTrustSignal(Request $request)
+    {
+        $data = $request->validate([
+            'text' => 'required|array',
+            'order' => 'nullable|integer',
+        ]);
+
+        $signal = DatabricksTrustSignal::create($data);
+        return response()->json(['status' => 'success', 'data' => $signal], 201);
+    }
+
+    public function updateTrustSignal(Request $request, $id)
+    {
+        $signal = DatabricksTrustSignal::findOrFail($id);
+        $data = $request->validate([
+            'text' => 'nullable|array',
+            'order' => 'nullable|integer',
+        ]);
+
+        $signal->update($data);
+        return response()->json(['status' => 'success', 'data' => $signal]);
+    }
+
+    public function destroyTrustSignal($id)
+    {
+        $signal = DatabricksTrustSignal::findOrFail($id);
+        $signal->delete();
+        return response()->json(['status' => 'success', 'message' => 'Trust signal deleted successfully']);
     }
 }

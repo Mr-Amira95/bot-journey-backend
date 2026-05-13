@@ -101,6 +101,16 @@ Route::prefix('admin')->group(function () {
         Route::post('databricks/stats', [\App\Http\Controllers\Api\Admin\DatabricksPageController::class, 'storeStat']);
         Route::post('databricks/stats/{id}', [\App\Http\Controllers\Api\Admin\DatabricksPageController::class, 'updateStat']);
         Route::delete('databricks/stats/{id}', [\App\Http\Controllers\Api\Admin\DatabricksPageController::class, 'destroyStat']);
+
+        Route::get('databricks/partner-points', [\App\Http\Controllers\Api\Admin\DatabricksPageController::class, 'getPartnerPoints']);
+        Route::post('databricks/partner-points', [\App\Http\Controllers\Api\Admin\DatabricksPageController::class, 'storePartnerPoint']);
+        Route::post('databricks/partner-points/{id}', [\App\Http\Controllers\Api\Admin\DatabricksPageController::class, 'updatePartnerPoint']);
+        Route::delete('databricks/partner-points/{id}', [\App\Http\Controllers\Api\Admin\DatabricksPageController::class, 'destroyPartnerPoint']);
+
+        Route::get('databricks/trust-signals', [\App\Http\Controllers\Api\Admin\DatabricksPageController::class, 'getTrustSignals']);
+        Route::post('databricks/trust-signals', [\App\Http\Controllers\Api\Admin\DatabricksPageController::class, 'storeTrustSignal']);
+        Route::post('databricks/trust-signals/{id}', [\App\Http\Controllers\Api\Admin\DatabricksPageController::class, 'updateTrustSignal']);
+        Route::delete('databricks/trust-signals/{id}', [\App\Http\Controllers\Api\Admin\DatabricksPageController::class, 'destroyTrustSignal']);
     });
 });
 
