@@ -21,7 +21,7 @@ class SectionController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'type' => 'required|in:hero,how_it_works,industries,why_botjourney,cta,blog,faq,projects,agentic_ai',
+            'type' => 'required|in:hero,how_it_works,industries,why_botjourney,cta,blog,faq,projects,agentic_ai,mobile',
             'title' => 'nullable|array',
             'subtitle' => 'nullable|array',
             'badge' => 'nullable|array',
@@ -37,7 +37,7 @@ class SectionController extends Controller
     {
         $section = Section::where('type', $type)->firstOrFail();
         $data = $request->validate([
-            'type' => 'nullable|in:hero,how_it_works,industries,why_botjourney,cta,blog,faq,projects,agentic_ai',
+            'type' => 'nullable|in:hero,how_it_works,industries,why_botjourney,cta,blog,faq,projects,agentic_ai,mobile',
             'title' => 'nullable|array',
             'subtitle' => 'nullable|array',
             'badge' => 'nullable|array',
